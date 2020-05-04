@@ -257,3 +257,7 @@ docs/dev
 
 # Config files
 *.conf
+
+# Extra crap
+.clangd
+debug/

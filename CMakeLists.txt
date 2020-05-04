@@ -161,6 +161,8 @@ add_custom_target(check-lint echo '${BUSTUB_LINT_FILES}' | xargs -n12 -P8
 add_custom_target(check-clang-tidy
         ${BUSTUB_BUILD_SUPPORT_DIR}/run_clang_tidy.py                     # run LLVM's clang-tidy script
         -clang-tidy-binary ${CLANG_TIDY_BIN}                              # using our clang-tidy binary
+        # bunch of disabled checks with clangtidy 10, which happen on the original source code
+        -checks=-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-make-member-function-const,-bugprone-branch-clone,-bugprone-signed-char-misuse,-modernize-use-auto,-readability-qualified-auto,-readability-redundant-access-specifiers,-bugprone-unhandled-self-assignment,-clang-diagnostic-implicit-int-float-conversion
         -p ${CMAKE_BINARY_DIR}                                            # using cmake's generated compile commands
         )
 add_dependencies(check-clang-tidy gtest bustub_shared)                    # needs gtest headers, compile_commands.json
