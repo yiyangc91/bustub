@@ -40,7 +40,7 @@ bool ClockReplacer::Victim(frame_id_t *frame_id) {
   if (killerHand == clock_.size()) {
     killerHand = 0;
   }
-  while (victimizable_.load()) {
+  while (victimizable_.load() != 0) {
     if (clock_[killerHand]) {
       auto curFrameId = *clock_[killerHand];
 
