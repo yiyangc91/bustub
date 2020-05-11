@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <list>
+#include <stack>
 #include <mutex>  // NOLINT
 #include <unordered_map>
 
@@ -164,9 +164,25 @@ class BufferPoolManager {
   std::unordered_map<page_id_t, frame_id_t> page_table_;
   /** Replacer to find unpinned pages for replacement. */
   Replacer *replacer_;
-  /** List of free pages. */
-  std::list<frame_id_t> free_list_;
-  /** This latch protects shared data structures. We recommend updating this comment to describe what it protects. */
+
+  // This trackes the frames which are FREE.
+	// Note: unpinned frames are not tracked here.
+  std::stack<frame_id_t, std::vector<frame_id_t>> free_list_;
+
+	// assuming disk manager, log manager and replacer are all thread safe.
+	// This protects the page table, page array and free list of the
+	// buffer pool manager.
+	// This ALSO protects the page metadata itself. wlatch and rlatch on the page
+	// is to protect the data of the page, not the metadata.
   std::mutex latch_;
+
+ private:
+	// Uses the replacer to pick a frame to free, eliminates the page.
+	// * Wipes the page stored by that frame, as below.
+  bool victimizeFrame();
+
+	// Wipes the page from the page table. This also includes deletion and flushing
+	// of the page. Assumes that the page is correctly unpinned.
+	void wipePage(std::unordered_map<page_id_t, frame_id_t>::const_iterator pageTableIterator);
 };
 }  // namespace bustub
