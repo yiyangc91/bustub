@@ -9,6 +9,14 @@
 // Copyright (c) 2015-2019, Carnegie Mellon University Database Group
 //
 //===----------------------------------------------------------------------===//
+//
+//
+// The implementation here is NOT a clock replacer.
+// It's my own bizzare invention where new elements in the clock are inserted
+// prior to the hand, and empty slots are shuffled around a vector.
+//
+// The actual clock replacer is pretty trivial to implement with a single
+// circular buffer.
 
 #include "buffer/clock_replacer.h"
 
