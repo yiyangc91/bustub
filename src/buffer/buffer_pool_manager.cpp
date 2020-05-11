@@ -172,7 +172,9 @@ bool BufferPoolManager::DeletePageImpl(page_id_t page_id) {
 	pages_[frameId].RUnlatch();
 
 	// No page lock required  - pin count is zero, no other users
-		LOG_DEBUG("DeletePageImpl(%d): Wiping page", page_id);
+	// If we're going to be deleting the page, may as well skip writes
+	pages_[frameId].is_dirty_ = false;
+  LOG_DEBUG("DeletePageImpl(%d): Wiping page", page_id);
 	wipePage(frameIdIterator);
 	disk_manager_->DeallocatePage(page_id);
   return true;
