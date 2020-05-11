@@ -10,7 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "storage/disk/disk_manager.h"
+
 #include <sys/stat.h>
+
 #include <cassert>
 #include <cstring>
 #include <iostream>
@@ -18,7 +21,6 @@
 #include <thread>  // NOLINT
 
 #include "common/logger.h"
-#include "storage/disk/disk_manager.h"
 
 namespace bustub {
 

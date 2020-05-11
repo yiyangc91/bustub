@@ -13,7 +13,6 @@
 #include "buffer/clock_replacer.h"
 
 #include <algorithm>
-#include <thread>
 
 #include "common/logger.h"
 #include "common/macros.h"

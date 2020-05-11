@@ -10,13 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "type/decimal_type.h"
+
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <string>
 
 #include "common/exception.h"
-#include "type/decimal_type.h"
 
 namespace bustub {
 #define DECIMAL_COMPARE_FUNC(OP)                                          \
@@ -298,7 +299,7 @@ Value DecimalType::CastAs(const Value &val, const TypeId type_id) const {
       if (val.IsNull()) {
         return Value(type_id, BUSTUB_INT64_NULL);
       }
-			// compile error here? what?
+      // compile error here? what?
       if (val.GetAs<int64_t>() > BUSTUB_INT64_MAX || val.GetAs<int64_t>() < BUSTUB_INT64_MIN) {
         throw Exception(ExceptionType::OUT_OF_RANGE, "Numeric value out of range.");
       }
