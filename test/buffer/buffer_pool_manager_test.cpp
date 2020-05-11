@@ -141,6 +141,20 @@ TEST(BufferPoolManagerTest, SampleTest) {
   delete disk_manager;
 }
 
+TEST(BufferPoolManagerTest, UnpinNonExistingTest) {
+  const std::string db_name = "test.db";
+  const size_t buffer_pool_size = 1;  // BP of size 1
+
+  auto disk_manager = std::make_unique<DiskManager>(db_name);
+  auto bpm = std::make_unique<BufferPoolManager>(buffer_pool_size, disk_manager.get());
+
+  ASSERT_FALSE(bpm->UnpinPage(123, true));
+
+  // Shutdown the disk manager and remove the temporary file we created.
+  disk_manager->ShutDown();
+  remove("test.db");
+}
+
 TEST(BufferPoolManagerTest, MultiPinUnpinTest) {
   const std::string db_name = "test.db";
   const size_t buffer_pool_size = 1;  // BP of size 1
@@ -177,6 +191,21 @@ TEST(BufferPoolManagerTest, MultiPinUnpinTest) {
   EXPECT_EQ(nullptr, bpm->FetchPage(pageId0));
   bpm->UnpinPage(pageId1, false);  // 0
   EXPECT_NE(nullptr, bpm->FetchPage(pageId0));
+
+  // Shutdown the disk manager and remove the temporary file we created.
+  disk_manager->ShutDown();
+  remove("test.db");
+}
+
+TEST(BufferPoolManagerTest, DeleteNonExistingPage) {
+  const std::string db_name = "test.db";
+  const size_t buffer_pool_size = 1;  // BP of size 1
+
+  auto disk_manager = std::make_unique<DiskManager>(db_name);
+  auto bpm = std::make_unique<BufferPoolManager>(buffer_pool_size, disk_manager.get());
+
+  // Actually delete the page
+  ASSERT_TRUE(bpm->DeletePage(123));
 
   // Shutdown the disk manager and remove the temporary file we created.
   disk_manager->ShutDown();
