@@ -142,8 +142,8 @@ Page *BufferPoolManager::NewPageImpl(page_id_t *page_id) {
   page_table_.insert({allocatedPageId, frame});
   replacer_->Pin(frame);
 
-  LOG_DEBUG("NewPageImpl(%p): Allocated a page %d at frame %d", page_id, *page_id, frame);
   *page_id = allocatedPageId;
+  LOG_DEBUG("NewPageImpl(%p): Allocated a page %d at frame %d", page_id, *page_id, frame);
   return &(pages_[frame]);
 }
 

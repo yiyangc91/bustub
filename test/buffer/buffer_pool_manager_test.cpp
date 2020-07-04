@@ -403,10 +403,12 @@ TEST(BufferPoolManagerTest, FlushAllUndirtiesThePage) {
   bpm->UnpinPage(pageId0, false);
 
   // Replace the page
+	std::array<page_id_t, 10> pageIds;
   for (size_t i = 0; i < 10; ++i) {
-    page_id_t tmpPageId;
-    bpm->NewPage(&tmpPageId);
-    bpm->UnpinPage(tmpPageId, false);
+    bpm->NewPage(&pageIds[i]);
+  }
+  for (size_t i = 0; i < 10; ++i) {
+    bpm->UnpinPage(pageIds[i], false);
   }
 
   // Fetch the original page
